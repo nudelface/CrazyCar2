@@ -11,10 +11,16 @@
 
 
 void HAL_I2C_Init(void);
-void HAL_Motion_Init(void);
-void GetSlaveData(unsigned char SlaveAdress, unsigned char len, unsigned char *data);
 
-#define SL_MOTION_ADD 0x68
+typedef struct SlaveData{
+    unsigned char SlAddr;
+    unsigned char RAddr;
+    unsigned short Data;
+}SlaveData;
+
+void GetSlaveData(SlaveData *data);
+
+enum {WriteRegAd,Byte1, Byte2};
 
 typedef struct {
 	unsigned char Addr;

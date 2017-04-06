@@ -20,6 +20,7 @@
 #include "AL\sense_read.h"
 #include "AL\Controller.h"
 #include "HAL\hal_i2c.h"
+#include "DL\driver_gyro.h"
 
 /*
  * main.c
@@ -110,7 +111,7 @@ states laststate=Curve;
 turns  Corner=LTurn;
 
 
-
+extern SlaveData ACCX;
 
 
 
@@ -178,7 +179,7 @@ void main(void)
 		{
 			//Driver_SetThrottle(100);
 			Driver_SetSteering(100);
-			GetSlaveData(SL_MOTION_ADD, 1, 1);
+			GetSlaveData(&ACCX);
 		}
 		else
 		{

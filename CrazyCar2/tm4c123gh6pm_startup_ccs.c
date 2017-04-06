@@ -25,6 +25,7 @@
 #include <stdint.h>
 #include "HAL/hal_timerB0.h"
 #include "HAL/hal_timerA1.h"
+#include "HAL/hal_i2c.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -77,6 +78,7 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 // To be added by user
 extern void Timer0BIntHandler(void);
+extern void I2CMasterIntHandler(void);
 
 //*****************************************************************************
 //
@@ -113,7 +115,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // UART0 Rx and Tx
     IntDefaultHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
-    IntDefaultHandler,                      // I2C0 Master and Slave
+    I2CMasterIntHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
 	PWM1IntHandler,                      // PWM Generator 1

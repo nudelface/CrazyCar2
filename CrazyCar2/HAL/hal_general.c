@@ -37,7 +37,7 @@ void HAL_Init(void)
     HAL_USCIB1_Init();
     HAL_USCIB1_Transmit();
 	HAL_I2C_Init();
-	HAL_Motion_Init();
+
 	//HAL_Wdt_Init();
 	//HAL_Adc_init();
    // HAL_DMA_Init();

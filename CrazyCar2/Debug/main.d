@@ -1,11 +1,11 @@
 # FIXED
 
 main.obj: ../main.c
-main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.4.LTS/include/stdint.h
-main.obj: C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.4.LTS/include/stdbool.h
-main.obj: C:/ti/TivaWare_C_Series-2.1.3.156/inc/hw_memmap.h
-main.obj: C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/gpio.h
-main.obj: C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/sysctl.h
+main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h
+main.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h
+main.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h
+main.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h
+main.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h
 main.obj: ../HAL/hal_general.h
 main.obj: ../HAL/hal_gpio.h
 main.obj: ../HAL/Interrupts.h
@@ -19,13 +19,14 @@ main.obj: ../AL/Sensorcalib.h
 main.obj: ../AL/sense_read.h
 main.obj: ../AL/Controller.h
 main.obj: ../HAL/hal_i2c.h
+main.obj: ../DL/driver_gyro.h
 
 ../main.c: 
-C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.4.LTS/include/stdint.h: 
-C:/ti/ccsv6/tools/compiler/ti-cgt-arm_15.12.4.LTS/include/stdbool.h: 
-C:/ti/TivaWare_C_Series-2.1.3.156/inc/hw_memmap.h: 
-C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/gpio.h: 
-C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/sysctl.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
+C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h: 
+C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h: 
+C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/gpio.h: 
+C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h: 
 ../HAL/hal_general.h: 
 ../HAL/hal_gpio.h: 
 ../HAL/Interrupts.h: 
@@ -39,3 +40,4 @@ C:/ti/TivaWare_C_Series-2.1.3.156/driverlib/sysctl.h:
 ../AL/sense_read.h: 
 ../AL/Controller.h: 
 ../HAL/hal_i2c.h: 
+../DL/driver_gyro.h: 
