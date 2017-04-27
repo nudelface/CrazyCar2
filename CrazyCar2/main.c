@@ -21,6 +21,7 @@
 #include "AL\Controller.h"
 #include "HAL\hal_i2c.h"
 #include "DL\driver_gyro.h"
+#include "HAL\hal_uart.h"
 
 /*
  * main.c
@@ -100,6 +101,7 @@ int dDelta=0;
 int line_des=0;
 int LastDeltaDist=0;
 extern int SpeedSamp;
+extern int initfin;
 
 
 typedef enum {DriveStraight, Hinderniss, Curve} states;
@@ -112,6 +114,7 @@ turns  Corner=LTurn;
 
 
 extern SlaveData ACCX;
+extern RFRX RxData;
 
 
 
@@ -154,38 +157,19 @@ void main(void)
 
 		}
 
+	if(RxData.RxSucc==1 && initfin==1)
+		{
+		  RxStuff();
+		 RxData.RxSucc=0;
+		}
+		else if (RxData.RxSucc==2)
+		{
+		    Driver_LCD_WriteString("Rx_Timeout",10,1,0);
+		    RxData.RxSucc=0;
+		}
 
 		//////////////////////////////////////////////////
-		if(Tryoutcount<100)
-		{
-			//Driver_SetThrottle(100);
-			Driver_SetSteering(-100);
-			if(Tryoutcount==1)
-			{
-			Driver_LCD_WriteString("dist_left",6,1,0);
-			}
-		}
-		else if(Tryoutcount<200)
-		{
-			//Driver_SetThrottle(50);
-			Driver_SetSteering(-50);
-		}
-		else if(Tryoutcount<300)
-		{
-			//Driver_SetBack(50);
-			Driver_SetSteering(50);
-		}
-		else if(Tryoutcount<400)
-		{
-			//Driver_SetThrottle(100);
-			Driver_SetSteering(100);
-			GetSlaveData(&ACCX);
-		}
-		else
-		{
-			Tryoutcount=0;
-		}
-
+	GetSlaveData(&ACCX);
 
 
 		////////////////////////////////////////////////////////////////////

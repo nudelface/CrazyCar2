@@ -41,6 +41,7 @@
 #include "driverlib/interrupt.h"
 
 #include "HAL/hal_adc12.h"
+#include "HAL/hal_uart.h"
 extern int SpeedReady;
 extern int Tryoutcount;
 extern ADC12Com ADC1;
@@ -79,6 +80,7 @@ extern uint32_t __STACK_TOP;
 // To be added by user
 extern void Timer0BIntHandler(void);
 extern void I2CMasterIntHandler(void);
+extern void UARTIntHandler(void);
 
 //*****************************************************************************
 //
@@ -113,7 +115,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E
     IntDefaultHandler,                      // UART0 Rx and Tx
-    IntDefaultHandler,                      // UART1 Rx and Tx
+    UARTIntHandler,                      // UART1 Rx and Tx
     IntDefaultHandler,                      // SSI0 Rx and Tx
     I2CMasterIntHandler,                      // I2C0 Master and Slave
     IntDefaultHandler,                      // PWM Fault

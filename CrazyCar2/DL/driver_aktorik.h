@@ -13,7 +13,8 @@
 
 #define StPWM_full_left 4465
 #define StPWM_full_right 2615
-#define StPWM_middle 3590
+#define StPWM_middle 3850
+
 //#define res_left ((StPWM_middle-StPWM_full_left) / 100)
 //#define res_right ((StPWM_full_right-StPWM_middle) / 100)
 

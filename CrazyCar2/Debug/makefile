@@ -13,6 +13,7 @@ ORDERED_OBJS += \
 "./main.obj" \
 "./tm4c123gh6pm_startup_ccs.obj" \
 "./AL/sense_read.obj" \
+"./DL/driver_RF.obj" \
 "./DL/driver_aktorik.obj" \
 "./DL/driver_general.obj" \
 "./DL/driver_gyro.obj" \
@@ -24,6 +25,7 @@ ORDERED_OBJS += \
 "./HAL/hal_i2c.obj" \
 "./HAL/hal_timerA1.obj" \
 "./HAL/hal_timerB0.obj" \
+"./HAL/hal_uart.obj" \
 "./HAL/hal_usc.obj" \
 "./HAL/hal_usciB1.obj" \
 "../tm4c123gh6pm.cmd" \
@@ -174,8 +176,8 @@ CrazyCar2.hex: $(EXE_OUTPUTS)
 # Other Targets
 clean:
 	-$(RM) $(BIN_OUTPUTS__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "AL\sense_read.obj" "DL\driver_aktorik.obj" "DL\driver_general.obj" "DL\driver_gyro.obj" "DL\driver_lcd.obj" "HAL\Interrupts.obj" "HAL\hal_adc12.obj" "HAL\hal_general.obj" "HAL\hal_gpio.obj" "HAL\hal_i2c.obj" "HAL\hal_timerA1.obj" "HAL\hal_timerB0.obj" "HAL\hal_usc.obj" "HAL\hal_usciB1.obj" 
-	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "AL\sense_read.d" "DL\driver_aktorik.d" "DL\driver_general.d" "DL\driver_gyro.d" "DL\driver_lcd.d" "HAL\Interrupts.d" "HAL\hal_adc12.d" "HAL\hal_general.d" "HAL\hal_gpio.d" "HAL\hal_i2c.d" "HAL\hal_timerA1.d" "HAL\hal_timerB0.d" "HAL\hal_usc.d" "HAL\hal_usciB1.d" 
+	-$(RM) "main.obj" "tm4c123gh6pm_startup_ccs.obj" "AL\sense_read.obj" "DL\driver_RF.obj" "DL\driver_aktorik.obj" "DL\driver_general.obj" "DL\driver_gyro.obj" "DL\driver_lcd.obj" "HAL\Interrupts.obj" "HAL\hal_adc12.obj" "HAL\hal_general.obj" "HAL\hal_gpio.obj" "HAL\hal_i2c.obj" "HAL\hal_timerA1.obj" "HAL\hal_timerB0.obj" "HAL\hal_uart.obj" "HAL\hal_usc.obj" "HAL\hal_usciB1.obj" 
+	-$(RM) "main.d" "tm4c123gh6pm_startup_ccs.d" "AL\sense_read.d" "DL\driver_RF.d" "DL\driver_aktorik.d" "DL\driver_general.d" "DL\driver_gyro.d" "DL\driver_lcd.d" "HAL\Interrupts.d" "HAL\hal_adc12.d" "HAL\hal_general.d" "HAL\hal_gpio.d" "HAL\hal_i2c.d" "HAL\hal_timerA1.d" "HAL\hal_timerB0.d" "HAL\hal_uart.d" "HAL\hal_usc.d" "HAL\hal_usciB1.d" 
 	-@echo 'Finished clean'
 	-@echo ' '
 

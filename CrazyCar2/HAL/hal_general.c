@@ -17,6 +17,7 @@
 //#include "hal_adc12.h"
 //#include "hal_dma.h"
 #include "hal_usc.h"
+#include "hal_uart.h"
 //#include "hal_timerA0.h"
 
 USCIB1_SPICom SpiCom;
@@ -37,6 +38,7 @@ void HAL_Init(void)
     HAL_USCIB1_Init();
     HAL_USCIB1_Transmit();
 	HAL_I2C_Init();
+	hal_uart_init();
 
 	//HAL_Wdt_Init();
 	//HAL_Adc_init();

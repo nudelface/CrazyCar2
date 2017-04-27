@@ -17,6 +17,7 @@ tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_gpio.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_adc12.h
+tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_uart.h
 
 ../tm4c123gh6pm_startup_ccs.c: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
@@ -35,3 +36,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_gpio.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h: 
 ../HAL/hal_adc12.h: 
+../HAL/hal_uart.h: 
