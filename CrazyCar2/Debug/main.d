@@ -21,6 +21,7 @@ main.obj: ../AL/Controller.h
 main.obj: ../HAL/hal_i2c.h
 main.obj: ../DL/driver_gyro.h
 main.obj: ../HAL/hal_uart.h
+main.obj: ../DL/driver_RF.h
 
 ../main.c: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
@@ -43,3 +44,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h:
 ../HAL/hal_i2c.h: 
 ../DL/driver_gyro.h: 
 ../HAL/hal_uart.h: 
+../DL/driver_RF.h: 

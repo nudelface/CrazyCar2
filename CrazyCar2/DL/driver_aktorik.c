@@ -77,18 +77,14 @@ void Driver_ESCInit(void)
 //  140 Perioden Maximal Brake
 
 //	Siehe h-file
+    Driver_LCD_WriteString("Neutral",7,1,0);
+		Driver_PWMInit(MinFPW,300);// in PWM Modus
+		Driver_LCD_WriteString("MAX",3,1,0);
+		Driver_PWMInit(MaxFPW,300);// MAX rpw
+		Driver_LCD_WriteString("MIN",3,1,0);
+		Driver_PWMInit(MaxRPW,300);// Min Rpw
 
-		Driver_PWMInit(MaxRPW,3);// in PWM Modus
 
-		Driver_PWMInit(MaxRPW,140);// MAX rpw
-
-		Driver_PWMInit(MinRPW,140);// Min Rpw
-
-		Driver_PWMInit(MinFPW,140);// Min FPW
-
-		Driver_PWMInit(MaxFPW,140);// Max FPW
-
-		Driver_PWMInit(MaxBRK,1);// Max Brake
 
 
 }

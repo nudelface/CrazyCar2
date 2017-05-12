@@ -22,6 +22,7 @@
 #include "HAL\hal_i2c.h"
 #include "DL\driver_gyro.h"
 #include "HAL\hal_uart.h"
+#include "DL\driver_RF.h"
 
 /*
  * main.c
@@ -116,7 +117,7 @@ turns  Corner=LTurn;
 extern SlaveData ACCX;
 extern RFRX RxData;
 
-
+extern RFRX SensData;
 
 
 
@@ -126,10 +127,28 @@ void main(void)
   {
 			HAL_Init();
 			Driver_Init();
+
 			Tryoutcount=0;
 
 	while(1)
 	{
+         Tryoutcount++;
+        if(Tryoutcount>=10)
+        {
+	    SendSensorData();
+        Tryoutcount=0;
+        SensData.Data[0]++;
+
+        GetSlaveData(&ACCX);
+
+        if(ACCX.Data>=0)
+        {
+        Driver_LCD_WriteUInt((int)ACCX.Data,9,5);
+        }
+        else
+        Driver_LCD_WriteString("-",1,9,0);
+        Driver_LCD_WriteUInt((int)-ACCX.Data,9,5);
+        }
 
 
 		//////////////////////////////Button Read
@@ -169,7 +188,7 @@ void main(void)
 		}
 
 		//////////////////////////////////////////////////
-	GetSlaveData(&ACCX);
+
 
 
 		////////////////////////////////////////////////////////////////////

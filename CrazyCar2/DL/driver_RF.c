@@ -17,6 +17,10 @@ RFCommand Init;
 Test Tester;
 
 extern RFRX RxData;
+RFRX SensData;
+
+
+
 
 void RF_Init (void)
 {
@@ -64,6 +68,15 @@ void RF_Init (void)
 
    TxData(&Tester,Tester.len+4);
 
+   SensData.Commandbyte=WRITE_COMMAND;
+   SensData.Command=READ_WRITE_DATA;
+   SensData.NodeAddr=HostAdress;
+   SensData.len=4;
+   SensData.Data[0]=3; ///DATASens1
+   SensData.Data[1]=4; // Data2
+   SensData.Data[2]=5; //DataSens2
+   SensData.Data[3]=0xA; // Data3
+
 
 }
 
@@ -87,16 +100,26 @@ void RxStuff(void)
         case 1:
             if(RxData.Data[1]==1)
             {
-                Driver_SetThrottle(-RxData.Data[2]);
+                Driver_SetBack(RxData.Data[2]);
             }
             else
             {
                 Driver_SetThrottle(RxData.Data[2]);
             }
         break;
+        case 3:
+                SendSensorData();
+        break;
 
 
     }
     }
 
+}
+
+
+
+void SendSensorData(void)
+{
+    TxData(&SensData,SensData.len+4);
 }

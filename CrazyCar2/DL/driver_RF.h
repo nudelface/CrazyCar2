@@ -54,7 +54,7 @@ typedef struct Test{
 
 
 }Test;
-
+void SendSensorData(void);
 void RxStuff(void);
 
 #endif /* DL_DRIVER_RF_H_ */

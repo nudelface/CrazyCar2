@@ -15,12 +15,24 @@ void HAL_I2C_Init(void);
 typedef struct SlaveData{
     unsigned char SlAddr;
     unsigned char RAddr;
-    unsigned short Data;
+    unsigned char Datab1;
+    unsigned char Datab2;
+    unsigned char lenRX;
+    unsigned char lenTX;
+    signed short Data;
+    int READ;
 }SlaveData;
 
-void GetSlaveData(SlaveData *data);
+typedef struct Command{
+    unsigned char SlAddr;
+    unsigned char RAdd[10];
+    unsigned char RData[10];
+}Command;
 
-enum {WriteRegAd,Byte1, Byte2};
+void GetSlaveData(SlaveData *data);
+void SendCommand(Command *data, int numCmd);
+
+enum {WriteRegAd,Byte1, Byte2,SingleByte};
 
 typedef struct {
 	unsigned char Addr;
