@@ -114,7 +114,7 @@ states laststate=Curve;
 turns  Corner=LTurn;
 
 
-extern SlaveData ACCX;
+extern SlaveData ACCX, ACCY, ACCZ,GYRX, GYRY, GYRZ;
 extern RFRX RxData;
 
 extern RFRX SensData;
@@ -129,7 +129,8 @@ void main(void)
 			Driver_Init();
 
 			Tryoutcount=0;
-
+			Driver_LCD_Clear();
+			SysCtlDelay(10000);
 	while(1)
 	{
          Tryoutcount++;
@@ -140,15 +141,100 @@ void main(void)
         SensData.Data[0]++;
 
         GetSlaveData(&ACCX);
+        GetSlaveData(&ACCY);
+        GetSlaveData(&ACCZ);
+        GetSlaveData(&GYRX);
+        GetSlaveData(&GYRY);
+        GetSlaveData(&GYRZ);
 
+        Driver_LCD_WriteString("X",1,1,0);
         if(ACCX.Data>=0)
         {
-        Driver_LCD_WriteUInt((int)ACCX.Data,9,5);
+            Driver_LCD_WriteString("+",1,1,5);
+            Driver_LCD_WriteUInt((ACCX.millivalue),1,14);
         }
         else
-        Driver_LCD_WriteString("-",1,9,0);
-        Driver_LCD_WriteUInt((int)-ACCX.Data,9,5);
+        {
+        Driver_LCD_WriteString("-",1,1,5);
+        Driver_LCD_WriteUInt((unsigned int)-ACCX.millivalue,1,14);
         }
+        Driver_LCD_WriteString("mG",2,1,45);
+
+        Driver_LCD_WriteString("Y",1,2,0);
+
+        if(ACCY.Data>=0)
+        {
+            Driver_LCD_WriteString("+",1,2,5);
+            Driver_LCD_WriteUInt((ACCY.millivalue),2,14);
+        }
+        else
+        {
+        Driver_LCD_WriteString("-",1,2,5);
+        Driver_LCD_WriteUInt((unsigned int)-ACCY.millivalue,2,14);
+        }
+        Driver_LCD_WriteString("mG",2,2,45);
+
+
+        Driver_LCD_WriteString("Z",1,3,0);
+
+        if(ACCZ.Data>=0)
+        {
+            Driver_LCD_WriteString("+",1,3,5);
+            Driver_LCD_WriteUInt((ACCZ.millivalue),3,14);
+        }
+        else
+        {
+        Driver_LCD_WriteString("-",1,3,5);
+        Driver_LCD_WriteUInt((unsigned int)-ACCZ.millivalue,3,14);
+        }
+        Driver_LCD_WriteString("mG",2,3,45);
+
+
+
+        Driver_LCD_WriteString("Gyro",4,4,10);
+
+        Driver_LCD_WriteString("X",1,5,0);
+        if(GYRX.Data>=0)
+        {
+            Driver_LCD_WriteString("+",1,5,5);
+            Driver_LCD_WriteUInt((GYRX.millivalue),5,14);
+        }
+        else
+        {
+        Driver_LCD_WriteString("-",1,5,5);
+        Driver_LCD_WriteUInt((unsigned int)-GYRX.millivalue,5,14);
+        }
+        Driver_LCD_WriteString("dps",3,6,45);
+
+        Driver_LCD_WriteString("Y",1,6,0);
+        if(GYRY.Data>=0)
+        {
+            Driver_LCD_WriteString("+",1,6,5);
+            Driver_LCD_WriteUInt((GYRY.millivalue),6,14);
+        }
+        else
+        {
+        Driver_LCD_WriteString("-",1,6,5);
+        Driver_LCD_WriteUInt((unsigned int)-GYRY.millivalue,6,14);
+        }
+        Driver_LCD_WriteString("dps",3,6,45);
+
+
+        Driver_LCD_WriteString("Z",1,7,0);
+        if(GYRZ.Data>=0)
+        {
+            Driver_LCD_WriteString("+",1,7,5);
+            Driver_LCD_WriteUInt((GYRZ.millivalue),7,14);
+        }
+        else
+        {
+        Driver_LCD_WriteString("-",1,7,5);
+        Driver_LCD_WriteUInt((unsigned int)-GYRZ.millivalue,7,14);
+        }
+        Driver_LCD_WriteString("dps",3,7,45);
+
+
+
 
 
 		//////////////////////////////Button Read
@@ -195,6 +281,6 @@ void main(void)
 
 	}
   }
-
+  }
 
 

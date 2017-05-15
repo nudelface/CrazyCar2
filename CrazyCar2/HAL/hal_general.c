@@ -32,12 +32,13 @@ void HAL_Init(void)
 
 	HAL_GPIO_Init();
 	//HAL_PMM_Init ();
+	HAL_I2C_Init();
 	HAL_UCS_Init();
 	HAL_TimerB0_Init();
     HAL_TimerA1_Init();
     HAL_USCIB1_Init();
     HAL_USCIB1_Transmit();
-	HAL_I2C_Init();
+
 	hal_uart_init();
 
 	//HAL_Wdt_Init();

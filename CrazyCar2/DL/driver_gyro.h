@@ -15,22 +15,26 @@ void DL_Motion_Init(void);
 
 #define SL_MOTION_ADD 0x68
 
-#define ACCX_H 0x59
-#define ACCX_L 0x60
-#define ACCY_H 0x61
-#define ACCY_L 0x62
-#define ACCZ_H 0x63
-#define ACCZ_L 0x64
+#define ACCX_H 59
+#define ACCX_L 60
+#define ACCY_H 61
+#define ACCY_L 62
+#define ACCZ_H 63
+#define ACCZ_L 64
 
-#define TOut_H 0x65
-#define TOut_L 0x66
+#define TOut_H 65
+#define TOut_L 66
 
-#define GYRX_H 0x67
-#define GYRX_L 0x68
-#define GYRY_H 0x69
-#define GYRY_L 0x70
-#define GYRZ_H 0x71
-#define GYRZ_L 0x72
+#define GYRX_H 67
+#define GYRX_L 68
+#define GYRY_H 69
+#define GYRY_L 70
+#define GYRZ_H 71
+#define GYRZ_L 72
+
+#define MagX_L 0x03
+#define MagY_L 0x05
+#define MagZ_L 0x07
 
 
 #endif /* DL_DRIVER_GYRO_H_ */

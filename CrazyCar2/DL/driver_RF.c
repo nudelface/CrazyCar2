@@ -35,7 +35,7 @@ void RF_Init (void)
 
     if(RxData.NodeAddr==NodeAdress)
     {
-        Driver_LCD_WriteString("NodeAdressSucces",16,2,0);
+      //  Driver_LCD_WriteString("NodeAdressSucces",16,2,0);
         RxData.RxSucc=0;
     }
     else

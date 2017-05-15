@@ -20,7 +20,11 @@ typedef struct SlaveData{
     unsigned char lenRX;
     unsigned char lenTX;
     signed short Data;
+    unsigned char RxData[10];
     int READ;
+    float multiplier;
+    float value;
+    int millivalue;
 }SlaveData;
 
 typedef struct Command{
