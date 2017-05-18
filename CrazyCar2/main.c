@@ -114,7 +114,7 @@ states laststate=Curve;
 turns  Corner=LTurn;
 
 
-extern SlaveData ACCX, ACCY, ACCZ,GYRX, GYRY, GYRZ;
+extern SlaveData ACCX, ACCY, ACCZ,GYRX, GYRY, GYRZ,MagX,MagY,MagZ;
 extern RFRX RxData;
 
 extern RFRX SensData;
@@ -138,7 +138,7 @@ void main(void)
         {
 	    SendSensorData();
         Tryoutcount=0;
-        SensData.Data[0]++;
+      //  SensData.Data[0]++;
 
         GetSlaveData(&ACCX);
         GetSlaveData(&ACCY);
@@ -146,6 +146,7 @@ void main(void)
         GetSlaveData(&GYRX);
         GetSlaveData(&GYRY);
         GetSlaveData(&GYRZ);
+   //     GetMagData();
 
         Driver_LCD_WriteString("X",1,1,0);
         if(ACCX.Data>=0)
@@ -220,7 +221,7 @@ void main(void)
         Driver_LCD_WriteString("dps",3,6,45);
 
 
-        Driver_LCD_WriteString("Z",1,7,0);
+     /*   Driver_LCD_WriteString("Z",1,7,0);
         if(GYRZ.Data>=0)
         {
             Driver_LCD_WriteString("+",1,7,5);
@@ -231,7 +232,7 @@ void main(void)
         Driver_LCD_WriteString("-",1,7,5);
         Driver_LCD_WriteUInt((unsigned int)-GYRZ.millivalue,7,14);
         }
-        Driver_LCD_WriteString("dps",3,7,45);
+        Driver_LCD_WriteString("dps",3,7,45);*/
 
 
 

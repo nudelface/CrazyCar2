@@ -10,17 +10,18 @@
 
 void DL_Motion_Init(void);
 
-
+void GetMagData(void);
 
 
 #define SL_MOTION_ADD 0x68
-
+#define SL_MAG_ADD 0x0C
 #define ACCX_H 59
 #define ACCX_L 60
 #define ACCY_H 61
 #define ACCY_L 62
 #define ACCZ_H 63
 #define ACCZ_L 64
+
 
 #define TOut_H 65
 #define TOut_L 66

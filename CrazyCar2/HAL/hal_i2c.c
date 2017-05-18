@@ -102,9 +102,19 @@ void GetSlaveData(SlaveData *data)
 	            I2CMasterControl(I2C0_BASE, I2C_MASTER_CMD_BURST_RECEIVE_FINISH);
 	            while(I2CMasterBusy(I2C0_BASE));
 	            data->RxData[1]=I2CMasterDataGet(I2C0_BASE);
+	            if(data->LSB==2)
+	            {
 	            data->Data=(short)(data->RxData[0]<<8)|(short)(data->RxData[1]);
-	            data->value=(float)data->Data * data->multiplier;
-	            data->millivalue=(int)(data->value*1000);
+                data->value=(float)data->Data * data->multiplier;
+                data->millivalue=(int)(data->value*1000);
+	            }
+	            else
+	            {
+	                data->Data=(short)(data->RxData[1]<<8)|(short)(data->RxData[0]);
+	                data->millivalue=(float)data->Data * data->multiplier;
+	                data->value=(int)(data->value/1000);
+	            }
+
 
 	     // }
 

@@ -25,6 +25,7 @@ typedef struct SlaveData{
     float multiplier;
     float value;
     int millivalue;
+    unsigned int LSB;
 }SlaveData;
 
 typedef struct Command{
