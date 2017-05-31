@@ -7,6 +7,7 @@
 
 #include "driver_gyro.h"
 #include "..\HAL\hal_i2c.h"
+#include "math.h"
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -15,14 +16,21 @@ SlaveData ACCY;
 SlaveData ACCZ;
 SlaveData GYRX;
 SlaveData GYRY, GYRZ;
-SlaveData WHOAMI,WHOIAM;
-SlaveData MagX;
-SlaveData MagY;
-SlaveData MagZ;
+SlaveData WHOAMI,WHOIAM,ResetMag,GetMode;
+SlaveData MagX,ASAX;
+SlaveData MagY,ASAY;
+SlaveData MagZ,ASAZ;
 
 Command Conf;
 Command Reset;
-Command Bypass,BypassOff;
+Command Bypass,BypassOff,SetMode;
+int init1=0;
+
+double Hx,Hx_f,Hx_last=0;
+double Hy,Hy_f,Hy_last=0;
+double Hz,Hz_f,Hz_last=0;
+float phi;
+
 
 
 void DL_Motion_Init(void)
@@ -85,6 +93,14 @@ void DL_Motion_Init(void)
     WHOIAM.RAddr= 00;
     WHOIAM.lenRX=1;
     WHOIAM.LSB=2;
+    GetMode.SlAddr=SL_MAG_ADD;
+    GetMode.RAddr=0x0A;
+    GetMode.lenRX=1;
+    GetMode.LSB=2;
+
+    SetMode.SlAddr=SL_MAG_ADD;
+    SetMode.RAdd[0]=0x0A;
+    SetMode.RData[0]=2;
 
 
 
@@ -109,7 +125,7 @@ void DL_Motion_Init(void)
    BypassOff.RAdd[0]=55;
    BypassOff.RData[0]=0;
 
-  /* MagX.SlAddr=SL_MAG_ADD;
+   MagX.SlAddr=SL_MAG_ADD;
    MagX.RAddr=MagX_L;
    MagX.lenRX=2;
    MagX.multiplier=0.146;
@@ -125,7 +141,23 @@ void DL_Motion_Init(void)
   MagZ.RAddr=MagZ_L;
   MagZ.lenRX=2;
   MagZ.multiplier=0.146;
-  MagZ.LSB=1;*/
+  MagZ.LSB=1;
+
+  ASAX.SlAddr=SL_MAG_ADD;
+  ASAX.RAddr=AsaX;
+  ASAX.lenRX=1;
+
+  ASAY.SlAddr=SL_MAG_ADD;
+  ASAY.RAddr=AsaY;
+  ASAY.lenRX=1;
+
+  ASAZ.SlAddr=SL_MAG_ADD;
+  ASAZ.RAddr=AsaY;
+  ASAZ.lenRX=1;
+
+  ResetMag.SlAddr=SL_MAG_ADD;
+  ResetMag.RAddr=ST2;
+  ResetMag.lenRX=1;
 
 
 
@@ -141,14 +173,82 @@ void DL_Motion_Init(void)
 void GetMagData(void)
 {
 SendCommand(&Bypass,1);
-//SysCtlDelay(1000);
+SysCtlDelay(10000);
 ////Get slavedata
 GetSlaveData(&WHOIAM);
+SendCommand(&SetMode,1);
+SysCtlDelay(10000);
+GetSlaveData(&GetMode);
 GetSlaveData(&MagX);
 GetSlaveData(&MagY);
 GetSlaveData(&MagZ);
+GetSlaveData(&ASAX);
+GetSlaveData(&ASAY);
+GetSlaveData(&ASAZ);
+GetSlaveData(&ResetMag);
 /// Data neuberechnen
 SendCommand(&BypassOff,1);
 //SysCtlDelay(10000);
+
+Hx=(double)MagX.Data*(((((double)ASAX.RxData[0]-128)*0.5)/128)+1);
+Hy=(double)MagY.Data*(((((double)ASAY.RxData[0]-128)*0.5)/128)+1);
+Hz=(double)MagZ.Data*(((((double)ASAZ.RxData[0]-128)*0.5)/128)+1);
+if((Hy>(Hy_last+Hy_last*0.1))&&init1>=5)
+{
+    Hy_f=Hy_last+Hy_last*0.1;
+    Hy_last=Hy_f;
+   }
+else if((Hy<(Hy_last-Hy_last*0.1))&&init1>=5)
+{
+    Hy_f=Hy_last-Hy_last*0.1;
+    Hy_last=Hy_f;
+    }
+else
+{
+Hy_f=Hy;
+Hy_last=Hy_f;
+if(init1>10)
+{init1++;}
+}
+
+if((Hx>(Hx_last+Hx_last*0.1))&&init1>=5)
+{
+    Hx_f=Hx_last+Hx_last*0.1;
+    Hx_last=Hx_f;
+   }
+else if((Hx<(Hx_last-Hx_last*0.1))&&init1>=5)
+{
+    Hx_f=Hx_last-Hx_last*0.1;
+    Hx_last=Hx_f;
+    }
+else
+{
+Hx_f=Hx;
+Hx_last=Hx_f;
+
+}
+
+if((Hz>(Hz_last+Hz_last*0.1))&&init1>=5)
+{
+    Hz_f=Hz_last+Hz_last*0.1;
+    Hz_last=Hz_f;
+   }
+else if((Hz<(Hz_last-Hz_last*0.1))&&init1>=5)
+{
+    Hz_f=Hz_last-Hz_last*0.1;
+    Hz_last=Hz_f;
+    }
+else
+{
+Hz_f=Hz;
+Hz_last=Hz_f;
+
+}
+
+
+
+
+phi=((-atan2((float)Hx,(float)Hy))/(6.2831))*360;
+
 
 }

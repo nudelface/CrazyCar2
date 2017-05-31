@@ -24,6 +24,7 @@
 #include "HAL\hal_uart.h"
 #include "DL\driver_RF.h"
 
+
 /*
  * main.c
  */
@@ -116,6 +117,8 @@ turns  Corner=LTurn;
 
 extern SlaveData ACCX, ACCY, ACCZ,GYRX, GYRY, GYRZ,MagX,MagY,MagZ;
 extern RFRX RxData;
+extern double Hy,Hx,Hz,Hy_f,Hx_f,Hz_f;
+extern float phi;
 
 extern RFRX SensData;
 
@@ -134,10 +137,16 @@ void main(void)
 	while(1)
 	{
          Tryoutcount++;
+         GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, ~US2_DRIVER_EN);
+         GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, ~US1_DRIVER_EN);
         if(Tryoutcount>=10)
         {
 	    SendSensorData();
         Tryoutcount=0;
+        GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
+        GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
+
+
       //  SensData.Data[0]++;
 
         GetSlaveData(&ACCX);
@@ -146,66 +155,66 @@ void main(void)
         GetSlaveData(&GYRX);
         GetSlaveData(&GYRY);
         GetSlaveData(&GYRZ);
-   //     GetMagData();
+        GetMagData();
 
         Driver_LCD_WriteString("X",1,1,0);
-        if(ACCX.Data>=0)
+        if((Hx*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,1,5);
-            Driver_LCD_WriteUInt((ACCX.millivalue),1,14);
+            Driver_LCD_WriteUInt((unsigned int)(Hx_f*1000),1,14);
         }
         else
         {
         Driver_LCD_WriteString("-",1,1,5);
-        Driver_LCD_WriteUInt((unsigned int)-ACCX.millivalue,1,14);
+        Driver_LCD_WriteUInt((unsigned int)-(Hx_f*1000),1,14);
         }
-        Driver_LCD_WriteString("mG",2,1,45);
+        Driver_LCD_WriteString("nT",2,1,45);
 
         Driver_LCD_WriteString("Y",1,2,0);
 
-        if(ACCY.Data>=0)
+        if((Hy*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,2,5);
-            Driver_LCD_WriteUInt((ACCY.millivalue),2,14);
+            Driver_LCD_WriteUInt((unsigned int)(Hy_f*1000),2,14);
         }
         else
         {
         Driver_LCD_WriteString("-",1,2,5);
-        Driver_LCD_WriteUInt((unsigned int)-ACCY.millivalue,2,14);
+        Driver_LCD_WriteUInt((unsigned int)-(Hy_f*1000),2,14);
         }
-        Driver_LCD_WriteString("mG",2,2,45);
+        Driver_LCD_WriteString("nT",2,2,45);
 
 
         Driver_LCD_WriteString("Z",1,3,0);
 
-        if(ACCZ.Data>=0)
+        if((Hz*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,3,5);
-            Driver_LCD_WriteUInt((ACCZ.millivalue),3,14);
+            Driver_LCD_WriteUInt((unsigned int)(Hz_f*1000),3,14);
         }
         else
         {
         Driver_LCD_WriteString("-",1,3,5);
-        Driver_LCD_WriteUInt((unsigned int)-ACCZ.millivalue,3,14);
+        Driver_LCD_WriteUInt((unsigned int)-(Hz_f*1000),3,14);
         }
-        Driver_LCD_WriteString("mG",2,3,45);
+        Driver_LCD_WriteString("nT",2,3,45);
 
 
 
-        Driver_LCD_WriteString("Gyro",4,4,10);
+        Driver_LCD_WriteString("Winkel",4,4,10);
 
-        Driver_LCD_WriteString("X",1,5,0);
-        if(GYRX.Data>=0)
+        Driver_LCD_WriteString("phi",3,5,0);
+        if(phi>=0)
         {
-            Driver_LCD_WriteString("+",1,5,5);
-            Driver_LCD_WriteUInt((GYRX.millivalue),5,14);
+            Driver_LCD_WriteString("+",1,5,22);
+            Driver_LCD_WriteUInt((unsigned int)phi,5,28);
         }
         else
         {
-        Driver_LCD_WriteString("-",1,5,5);
-        Driver_LCD_WriteUInt((unsigned int)-GYRX.millivalue,5,14);
+        Driver_LCD_WriteString("-",1,5,22);
+        Driver_LCD_WriteUInt((unsigned int)-phi,5,28);
         }
-        Driver_LCD_WriteString("dps",3,6,45);
+        Driver_LCD_WriteString("Grad",4,6,55);
 
         Driver_LCD_WriteString("Y",1,6,0);
         if(GYRY.Data>=0)
@@ -221,7 +230,7 @@ void main(void)
         Driver_LCD_WriteString("dps",3,6,45);
 
 
-     /*   Driver_LCD_WriteString("Z",1,7,0);
+        Driver_LCD_WriteString("Z",1,7,0);
         if(GYRZ.Data>=0)
         {
             Driver_LCD_WriteString("+",1,7,5);
@@ -232,7 +241,7 @@ void main(void)
         Driver_LCD_WriteString("-",1,7,5);
         Driver_LCD_WriteUInt((unsigned int)-GYRZ.millivalue,7,14);
         }
-        Driver_LCD_WriteString("dps",3,7,45);*/
+        Driver_LCD_WriteString("dps",3,7,45);
 
 
 

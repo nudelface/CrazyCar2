@@ -36,6 +36,11 @@ void GetMagData(void);
 #define MagX_L 0x03
 #define MagY_L 0x05
 #define MagZ_L 0x07
+#define ST2 0x09
+
+#define AsaX 0x10
+#define AsaY 0x11
+#define AsaZ 0x12
 
 
 #endif /* DL_DRIVER_GYRO_H_ */

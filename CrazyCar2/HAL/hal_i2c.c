@@ -111,8 +111,8 @@ void GetSlaveData(SlaveData *data)
 	            else
 	            {
 	                data->Data=(short)(data->RxData[1]<<8)|(short)(data->RxData[0]);
-	                data->millivalue=(float)data->Data * data->multiplier;
-	                data->value=(int)(data->value/1000);
+	                data->value=(float)data->Data * data->multiplier;
+	                data->millivalue=(int)(data->value*1000000);
 	            }
 
 

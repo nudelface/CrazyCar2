@@ -21,9 +21,10 @@
 #include "inc/hw_gpio.h"
 #include "driverlib/rom.h"
 #include "driverlib/interrupt.h"
+#include "driverlib/sysctl.h"
 extern int initcounter;
 
-#include "driverlib/sysctl.h"
+
 extern void PWM1IntHandler(void);
 
 uint32_t Period, dCThrottle, dCSteering;

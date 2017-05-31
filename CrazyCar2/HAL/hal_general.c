@@ -19,6 +19,7 @@
 #include "hal_usc.h"
 #include "hal_uart.h"
 //#include "hal_timerA0.h"
+#include "hal_ultrasdrive.h"
 
 USCIB1_SPICom SpiCom;
 i2cCom Motion;
@@ -38,7 +39,7 @@ void HAL_Init(void)
     HAL_TimerA1_Init();
     HAL_USCIB1_Init();
     HAL_USCIB1_Transmit();
-
+    UltrasonicDriverInit();
 	hal_uart_init();
 
 	//HAL_Wdt_Init();
