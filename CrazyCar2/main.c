@@ -23,6 +23,7 @@
 #include "DL\driver_gyro.h"
 #include "HAL\hal_uart.h"
 #include "DL\driver_RF.h"
+#include "driverlib/pwm.h"
 
 
 /*
@@ -136,29 +137,39 @@ void main(void)
 			SysCtlDelay(10000);
 	while(1)
 	{
-         Tryoutcount++;
-         GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, ~US2_DRIVER_EN);
-         GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, ~US1_DRIVER_EN);
-        if(Tryoutcount>=10)
-        {
-	    SendSensorData();
-        Tryoutcount=0;
         GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
         GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
+         Tryoutcount+=1;
+        // GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, ~US2_DRIVER_EN);
+        // GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, ~US1_DRIVER_EN);
+        if(Tryoutcount>=100000)
+        {
+	   // SendSensorData();
+        if(Tryoutcount<100001)
+        {
+            PWMGenEnable(PWM0_BASE, PWM_GEN_2);
+            PWMGenEnable(PWM0_BASE, PWM_GEN_2);
+        GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
+        GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
+        }
+        else
+        {
+        	Tryoutcount=0;
 
+        }
 
       //  SensData.Data[0]++;
 
-        GetSlaveData(&ACCX);
+   /*     GetSlaveData(&ACCX);
         GetSlaveData(&ACCY);
         GetSlaveData(&ACCZ);
         GetSlaveData(&GYRX);
         GetSlaveData(&GYRY);
         GetSlaveData(&GYRZ);
-        GetMagData();
+        GetMagData();*/
 
         Driver_LCD_WriteString("X",1,1,0);
-        if((Hx*1000)>=0)
+  /*     if((Hx*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,1,5);
             Driver_LCD_WriteUInt((unsigned int)(Hx_f*1000),1,14);
@@ -244,7 +255,7 @@ void main(void)
         Driver_LCD_WriteString("dps",3,7,45);
 
 
-
+*/
 
 
 		//////////////////////////////Button Read
@@ -290,6 +301,10 @@ void main(void)
 		////////////////////////////////////////////////////////////////////
 
 	}
+        else
+        {
+
+        }
   }
   }
 

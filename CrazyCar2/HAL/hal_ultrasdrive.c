@@ -21,9 +21,11 @@
 #include "driverlib/rom.h"
 #include "driverlib/interrupt.h"
 #include "hal_ultrasdrive.h"
+#include "driverlib/interrupt.h"
 
 
 #include "driverlib/sysctl.h"
+int pwmcounter=0;
 
 
 void UltrasonicDriverInit(void)
@@ -54,11 +56,32 @@ void UltrasonicDriverInit(void)
 
     PWMOutputState(PWM0_BASE, PWM_OUT_4_BIT | PWM_OUT_5_BIT, true);
 
+    PWMIntEnable(PWM0_BASE, PWM_INT_GEN_2);
+    PWMGenIntTrigEnable(PWM0_BASE, PWM_GEN_2, PWM_INT_CNT_ZERO);
+
+	PWMGenIntRegister(PWM0_BASE, PWM_GEN_2, PWM_INT_HANDLER);
+
+	PWMIntEnable(PWM0_BASE, PWM_INT_GEN_2);
+
+
+	IntEnable(INT_PWM0_2);
+
+	//IntPrioritySet(INT_PWM1_1, 0x00);
 
 
 
+}
 
+void PWM_INT_HANDLER(void)
+{
 
+	PWMGenIntClear(PWM0_BASE, PWM_GEN_2, PWM_INT_CNT_ZERO);
+	pwmcounter++;
+	if(pwmcounter>=10)
+	{
 
-
+		   PWMGenDisable(PWM0_BASE, PWM_GEN_2);
+		    PWMGenDisable(PWM0_BASE, PWM_GEN_2);
+		    pwmcounter=0;
+	}
 }

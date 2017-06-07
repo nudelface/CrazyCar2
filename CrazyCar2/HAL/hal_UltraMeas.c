@@ -23,6 +23,12 @@
 #include "driverlib/interrupt.h"
 #include "driverlib/sysctl.h"
 
+unsigned long CountUs1;
+unsigned long CountUs2;
+float DistUs1;
+float DistUs2;
+int busy=0;
+
 
 void initUltraMeas(void)
 {
@@ -42,4 +48,18 @@ void initUltraMeas(void)
     IntEnable(INT_TIMER0A);
     TimerEnable(TIMER0_BASE, TIMER_A);
 }
+
+
+float MeasDist(void)
+{
+	//start PWM
+
+	//STart Timer
+	//while !busy
+	//Calc Werte
+	//Return Werte
+
+}
+
+
 

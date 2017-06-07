@@ -1,11 +1,11 @@
 # FIXED
 
 tm4c123gh6pm_startup_ccs.obj: ../tm4c123gh6pm_startup_ccs.c
-tm4c123gh6pm_startup_ccs.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h
+tm4c123gh6pm_startup_ccs.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_timerB0.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_timerA1.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_i2c.h
-tm4c123gh6pm_startup_ccs.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h
+tm4c123gh6pm_startup_ccs.obj: C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/timer.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_ints.h
@@ -18,13 +18,14 @@ tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h
 tm4c123gh6pm_startup_ccs.obj: C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_adc12.h
 tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_uart.h
+tm4c123gh6pm_startup_ccs.obj: ../HAL/hal_ultrasdrive.h
 
 ../tm4c123gh6pm_startup_ccs.c: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdint.h: 
+C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdint.h: 
 ../HAL/hal_timerB0.h: 
 ../HAL/hal_timerA1.h: 
 ../HAL/hal_i2c.h: 
-C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.1.LTS/include/stdbool.h: 
+C:/ti/ccsv6/tools/compiler/arm_15.12.3.LTS/include/stdbool.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/timer.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_memmap.h: 
 C:/ti/TivaWare_C_Series-2.1.4.178/inc/hw_ints.h: 
@@ -37,3 +38,4 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/rom.h:
 C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/interrupt.h: 
 ../HAL/hal_adc12.h: 
 ../HAL/hal_uart.h: 
+../HAL/hal_ultrasdrive.h: 

@@ -42,6 +42,7 @@
 
 #include "HAL/hal_adc12.h"
 #include "HAL/hal_uart.h"
+#include "HAL/hal_ultrasdrive.h"
 extern int SpeedReady;
 extern int Tryoutcount;
 extern ADC12Com ADC1;
@@ -81,6 +82,7 @@ extern uint32_t __STACK_TOP;
 extern void Timer0BIntHandler(void);
 extern void I2CMasterIntHandler(void);
 extern void UARTIntHandler(void);
+extern void PWM_INT_HANDLER(void);
 
 //*****************************************************************************
 //
@@ -121,7 +123,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // PWM Fault
     IntDefaultHandler,                      // PWM Generator 0
 	PWM1IntHandler,                      // PWM Generator 1
-    IntDefaultHandler,                      // PWM Generator 2
+	PWM_INT_HANDLER,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder 0
     IntDefaultHandler,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
@@ -331,7 +333,7 @@ PWM1IntHandler(void)
 {
 	initcounter++;
 	SpeedReady=1;
-	Tryoutcount++;
+	//Tryoutcount++;
 	ADC1.Status.B.ADCrdy=1;
 	PWMGenIntClear(PWM1_BASE, PWM_GEN_1, PWM_INT_CNT_ZERO);
 	PWMGenIntClear(PWM1_BASE, PWM_GEN_1, PWM_INT_CNT_ZERO);
