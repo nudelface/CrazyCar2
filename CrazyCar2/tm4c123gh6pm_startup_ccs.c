@@ -83,6 +83,7 @@ extern void Timer0BIntHandler(void);
 extern void I2CMasterIntHandler(void);
 extern void UARTIntHandler(void);
 extern void PWM_INT_HANDLER(void);
+extern void TimerInt(void);
 
 //*****************************************************************************
 //
@@ -134,7 +135,7 @@ void (* const g_pfnVectors[])(void) =
 	Timer0BIntHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B
-    IntDefaultHandler,                      // Timer 2 subtimer A
+	TimerInt,                      // Timer 2 subtimer A
     IntDefaultHandler,                      // Timer 2 subtimer B
     IntDefaultHandler,                      // Analog Comparator 0
     IntDefaultHandler,                      // Analog Comparator 1

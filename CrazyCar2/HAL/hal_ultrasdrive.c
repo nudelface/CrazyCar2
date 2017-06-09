@@ -67,6 +67,8 @@ void UltrasonicDriverInit(void)
 	IntEnable(INT_PWM0_2);
 
 	//IntPrioritySet(INT_PWM1_1, 0x00);
+    GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
+    GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
 
 
 

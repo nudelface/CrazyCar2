@@ -8,7 +8,8 @@
 #ifndef HAL_HAL_ULTRAMEAS_H_
 #define HAL_HAL_ULTRAMEAS_H_
 void initUltraMeas(void);
-
+void TimerInt(void);
+float MeasDist(void);
 
 
 

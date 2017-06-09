@@ -9,6 +9,7 @@
 #include "HAL\Interrupts.h"
 #include "HAL\hal_usc.h"
 #include "HAL\hal_timerB0.h"
+#include "HAL\hal_UltraMeas.h"
 #include "DL\driver_general.h"
 #include "DL\driver_aktorik.h"
 #include "HAL\hal_usciB1.h"
@@ -123,6 +124,8 @@ extern float phi;
 
 extern RFRX SensData;
 
+float TESTI;
+
 
 
 void main(void)
@@ -147,10 +150,8 @@ void main(void)
 	   // SendSensorData();
         if(Tryoutcount<100001)
         {
-            PWMGenEnable(PWM0_BASE, PWM_GEN_2);
-            PWMGenEnable(PWM0_BASE, PWM_GEN_2);
-        GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
-        GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
+        	TESTI=MeasDist();
+
         }
         else
         {
@@ -169,6 +170,7 @@ void main(void)
         GetMagData();*/
 
         Driver_LCD_WriteString("X",1,1,0);
+        Driver_LCD_WriteUInt((unsigned int)TESTI,1,14);
   /*     if((Hx*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,1,5);
