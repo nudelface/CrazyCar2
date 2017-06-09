@@ -33,6 +33,7 @@ float DistUs2;
 int busy=1;
 int i;
 int TimeoutBusy;
+unsigned short TimeCounter;
 
 
 void initUltraMeas(void)
@@ -41,23 +42,28 @@ void initUltraMeas(void)
     while(!SysCtlPeripheralReady(SYSCTL_PERIPH_TIMER2))
     {}
 
-    GPIOPinConfigure(GPIO_PB0_T2CCP0);
-    GPIOPinTypeTimer(GPIO_PORTB_BASE, US1_SIGNAL_OUT|US2_SIGNAL_OUT);
+   // GPIOPinConfigure(GPIO_PB0_T2CCP0);
+    //GPIOPinTypeTimer(GPIO_PORTB_BASE, US1_SIGNAL_OUT|US2_SIGNAL_OUT);
     TimerClockSourceSet(TIMER2_BASE, TIMER_CLOCK_SYSTEM);
-    TimerConfigure(TIMER2_BASE, TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_CAP_TIME);
-    TimerPrescaleSet(TIMER2_BASE,TIMER_BOTH,20);
+    TimerConfigure(TIMER2_BASE, TIMER_CFG_SPLIT_PAIR | TIMER_CFG_A_PERIODIC);
+   // TimerPrescaleSet(TIMER2_BASE,TIMER_BOTH,20);
     IntMasterEnable();
     IntEnable(INT_TIMER2A);
 
 
-    TimerControlEvent(TIMER2_BASE, TIMER_A, TIMER_EVENT_POS_EDGE);
+    //TimerControlEvent(TIMER2_BASE, TIMER_A, TIMER_EVENT_POS_EDGE);
 
 
     TimerIntRegister(TIMER2_BASE, TIMER_A, TimerInt);
-    TimerIntEnable(TIMER2_BASE, TIMER_CAPA_EVENT);
-    TimerIntClear(TIMER2_BASE, TIMER_CAPA_EVENT);
+    TimerIntEnable(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+    TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+    IntEnable(INT_GPIOB);
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, US1_SIGNAL_OUT|US2_SIGNAL_OUT);
+    GPIOIntRegister(GPIO_PORTB_BASE, GpioInt);
+    //GPIOIntEnable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+    GPIOIntTypeSet(GPIO_PORTB_BASE,US1_SIGNAL_OUT, GPIO_RISING_EDGE );
 
-    TimerLoadSet(TIMER2_BASE, TIMER_A,65535);
+    TimerLoadSet(TIMER2_BASE, TIMER_A,2000);
 
     TimerEnable(TIMER2_BASE, TIMER_A | TIMER_B);
 
@@ -68,6 +74,8 @@ void initUltraMeas(void)
 
 float MeasDist(void)
 {
+    GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, US2_DRIVER_EN);
+    GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, US1_DRIVER_EN);
 	if(busy==1)
 	{
 	busy=0;
@@ -76,36 +84,39 @@ float MeasDist(void)
 
     PWMGenEnable(PWM0_BASE, PWM_GEN_2);
     PWMGenEnable(PWM0_BASE, PWM_GEN_2);
-    CountUs11=TimerValueGet(TIMER2_BASE, TIMER_A);
+    CountUs11=TimeCounter;
 	//STart Timer
    // SysCtlDelay(22000);
     for(i=0;i<=1500;i++)
     {}
     //TimerEnable(TIMER2_BASE, TIMER_A);
-    TimerIntClear(TIMER2_BASE, TIMER_CAPA_EVENT);
-    TimerIntEnable(TIMER2_BASE, TIMER_CAPA_EVENT);
+    GPIOIntClear(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+    GPIOIntEnable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
 
     //TimerEnable(TIMER2_BASE, TIMER_A);
 	//while !busy
+
     TimeoutBusy=0;
     while(!busy)
     {
     	TimeoutBusy++;
-    	if(TimeoutBusy>100000)
+    	if(TimeoutBusy>7000)
     	{
     		busy=1;
-    		TimerIntDisable(TIMER2_BASE, TIMER_CAPA_EVENT);
 
-    		//TimerDisable(TIMER2_BASE, TIMER_A | TIMER_B);
-    		TimerIntClear(TIMER2_BASE, TIMER_CAPA_EVENT);
+        GPIOIntDisable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+        GPIOIntClear(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+    		GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, LCD_BL);
+
     	}
     }
+	}
 
 	//Calc Werte
 	//Return Werte
-	}
 
-	if(TimeoutBusy<100000)
+
+	if(TimeoutBusy<10000000)
 	{
 	DistUs1mem[3]=DistUs1mem[2];
 	DistUs1mem[2]=DistUs1mem[1];
@@ -121,19 +132,28 @@ float MeasDist(void)
 
 void TimerInt(void)
 {
-	CountUs1=TimerValueGet(TIMER2_BASE, TIMER_A);
-	TimerIntDisable(TIMER2_BASE, TIMER_CAPA_EVENT);
-	GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, LCD_BL);
-	//TimerDisable(TIMER2_BASE, TIMER_A | TIMER_B);
-	TimerIntClear(TIMER2_BASE, TIMER_CAPA_EVENT);
+	TimerIntClear(TIMER2_BASE, TIMER_TIMA_TIMEOUT);
+	TimeCounter++;
+}
+
+void GpioInt(void)
+{
+	CountUs1=TimeCounter;
+
+    GPIOIntDisable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+    GPIOIntClear(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
+		GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, LCD_BL);
+		//TimerDisable(TIMER2_BASE, TIMER_A | TIMER_B);
 
 
 
-	Time1=CountUs11-CountUs1;
-//	TimerLoadSet(TIMER2_BASE, TIMER_A,0);
-	//TimerDisable(TIMER2_BASE, TIMER_A);
-	TimerIntDisable(TIMER2_BASE, TIMER_CAPA_EVENT);
-	busy=1;
+
+		Time1=CountUs11-CountUs1;
+	//	TimerLoadSet(TIMER2_BASE, TIMER_A,0);
+		//TimerDisable(TIMER2_BASE, TIMER_A);
+		busy=1;
+
+		//
 }
 
 

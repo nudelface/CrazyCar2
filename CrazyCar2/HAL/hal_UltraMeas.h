@@ -10,6 +10,7 @@
 void initUltraMeas(void);
 void TimerInt(void);
 float MeasDist(void);
+void GpioInt(void);
 
 
 
