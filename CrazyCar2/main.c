@@ -13,7 +13,7 @@
 #include "DL\driver_general.h"
 #include "DL\driver_aktorik.h"
 #include "HAL\hal_usciB1.h"
-//#include "HAL\hal_adc12.h"
+#include "HAL\hal_adc12.h"
 //#include "HAL\hal_dma.h"
 //#include "HAL\hal_timerA0.h"
 #include "DL\driver_lcd.h"
@@ -55,7 +55,7 @@ float KdSpeed=0.2;
 extern int SteeringCalibC;
 extern ButtonCom Buttons;
 extern USCIB1_SPICom SpiCom;
-//extern ADC12Com ADC1;
+extern ADC12Com ADC1;
 extern int state;
 extern int counterz;
 extern double PeriodTime;
@@ -67,9 +67,12 @@ extern int Timeout;
 int Tryoutcount=0;
 
 
-int AbstandRechts;
-int AbstandLinks;
-int AbstandFront;
+int Abstand1;
+int Abstand2;
+int Abstand3;
+long b_Abstand1;
+long b_Abstand2;
+long b_Abstand3;
 int LastValueLeft=0;
 int LastValueRight=0;
 int LastValueFront=0;
@@ -145,9 +148,28 @@ void main(void)
          Tryoutcount+=1;
         // GPIOPinWrite(GPIO_PORTA_BASE, US2_DRIVER_EN, ~US2_DRIVER_EN);
         // GPIOPinWrite(GPIO_PORTD_BASE, US1_DRIVER_EN, ~US1_DRIVER_EN);
+         if(ADC1.Status.B.ADCrdy==1)
+         {
+        	 b_Abstand1=ADC1.Bit[2];
+        	 b_Abstand2=ADC1.Bit[4];
+        	 b_Abstand3=ADC1.Bit[5];
+        	 Abstand1=Dist(b_Abstand1);
+        	 Abstand2=Dist(b_Abstand2);
+        	 Abstand3=Dist(b_Abstand3);
+        	 Driver_LCD_WriteString("1",1,3,0);
+        	 Driver_LCD_WriteString("2",1,4,0);
+        	 Driver_LCD_WriteString("3",1,5,0);
+        	 Driver_LCD_WriteUInt((unsigned int)Abstand1,3,14);
+        	 Driver_LCD_WriteUInt((unsigned int)Abstand2,4,14);
+        	 Driver_LCD_WriteUInt((unsigned int)Abstand3,5,14);
+        	 ADC1.Status.B.ADCrdy=0;
+
+         }
+
         if(Tryoutcount>=100000)
         {
-	   // SendSensorData();
+        	SensData.Data[0]=ACCX.millivalue;
+        	SendSensorData();
         if(Tryoutcount<100001)
         {
         	TESTI=MeasDist();
@@ -161,17 +183,39 @@ void main(void)
 
       //  SensData.Data[0]++;
 
-   /*     GetSlaveData(&ACCX);
+        GetSlaveData(&ACCX);
         GetSlaveData(&ACCY);
         GetSlaveData(&ACCZ);
         GetSlaveData(&GYRX);
         GetSlaveData(&GYRY);
         GetSlaveData(&GYRZ);
-        GetMagData();*/
+        GetMagData();
 
-        Driver_LCD_WriteString("X",1,1,0);
-        Driver_LCD_WriteUInt((unsigned int)TESTI,1,14);
-  /*     if((Hx*1000)>=0)
+        if((ACCX.millivalue)>=0)
+         {
+             Driver_LCD_WriteString("+",1,1,5);
+             Driver_LCD_WriteUInt((unsigned int)(ACCX.millivalue),1,14);
+         }
+         else
+         {
+         Driver_LCD_WriteString("-",1,1,5);
+         Driver_LCD_WriteUInt((unsigned int)-(ACCX.millivalue),1,14);
+         }
+
+        if((ACCY.millivalue)>=0)
+         {
+             Driver_LCD_WriteString("+",1,2,5);
+             Driver_LCD_WriteUInt((unsigned int)(ACCY.millivalue),2,14);
+         }
+         else
+         {
+         Driver_LCD_WriteString("-",1,2,5);
+         Driver_LCD_WriteUInt((unsigned int)-(ACCY.millivalue),2,14);
+         }
+        /*
+       // Driver_LCD_WriteString("X",1,1,0);
+       // Driver_LCD_WriteUInt((unsigned int)TESTI,1,14);
+       if((Hx*1000)>=0)
         {
             Driver_LCD_WriteString("+",1,1,5);
             Driver_LCD_WriteUInt((unsigned int)(Hx_f*1000),1,14);
@@ -257,7 +301,7 @@ void main(void)
         Driver_LCD_WriteString("dps",3,7,45);
 
 
-*/
+        */
 
 
 		//////////////////////////////Button Read

@@ -40,7 +40,7 @@ void DL_Motion_Init(void)
     ACCX.lenTX=1;
     ACCX.lenRX=2;
     ACCX.READ=true;
-    ACCX.multiplier=0.00012207;
+    ACCX.multiplier=-0.00012207;
     ACCX.LSB=2;
 
     ACCY.SlAddr=SL_MOTION_ADD;

@@ -30,9 +30,9 @@ void HAL_TimerB0_Init()
 
 
 	TimerClockSourceSet(TIMER0_BASE, TIMER_CLOCK_SYSTEM);
-	TimerConfigure(TIMER0_BASE, TIMER_CFG_B_PERIODIC);
+	TimerConfigure(TIMER0_BASE, TIMER_CFG_A_PERIODIC);
 
-	TimerLoadSet(TIMER0_BASE, TIMER_B,Timerval);
+	TimerLoadSet(TIMER0_BASE, TIMER_A,Timerval);
 
 
 	IntMasterEnable();

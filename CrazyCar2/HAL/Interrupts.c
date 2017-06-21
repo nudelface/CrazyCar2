@@ -21,8 +21,8 @@
 //#include "hal_general.h"
 //#include "..\DL\driver_general.h"
 //#include "..\DL\driver_aktorik.h"
-//#include "hal_usciB1.h"
-//#include "hal_adc12.h"
+#include "hal_usciB1.h"
+#include "hal_adc12.h"
 //#include "..\DL\driver_lcd.h"
 
 
@@ -30,7 +30,7 @@ ButtonCom Buttons;
 
 int initcounter=0;
 //extern USCIB1_SPICom SpiCom;
-//extern ADC12Com ADC1;
+extern ADC12Com ADC1;
 int counterz=0;
 //extern int DiskretEn;
 int SpeedReady=0;
@@ -59,6 +59,12 @@ Timer0BIntHandler(void)
 {
 TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 PeriodCount++;
+if((PeriodCount>=1000/120)&&(ADC1.Status.B.ADCrdy==0))
+{
+	ADCProcessorTrigger(ADC0_BASE, 0);
+	PeriodCount=0;
+}
+
 }
 
 /*

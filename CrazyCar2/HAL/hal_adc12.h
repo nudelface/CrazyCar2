@@ -10,6 +10,7 @@
 
 
 void HAL_Adc_init(void);
+void IntADC (void);
 
 typedef struct {
 	union {
@@ -19,9 +20,9 @@ typedef struct {
 			unsigned char dummy:7;
 		}B;
 	}Status;
-	unsigned int Bit_right;
-	unsigned int Bit_left;
-	unsigned int Bit_front;
+	uint32_t Bit[8];
+	unsigned int Bit2;
+	unsigned int Bit3;
 	unsigned int vBat;
 
 }ADC12Com;

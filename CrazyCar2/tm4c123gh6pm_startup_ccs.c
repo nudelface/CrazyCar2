@@ -84,6 +84,8 @@ extern void I2CMasterIntHandler(void);
 extern void UARTIntHandler(void);
 extern void PWM_INT_HANDLER(void);
 extern void TimerInt(void);
+extern void IntADC(void);
+
 
 //*****************************************************************************
 //
@@ -126,12 +128,12 @@ void (* const g_pfnVectors[])(void) =
 	PWM1IntHandler,                      // PWM Generator 1
 	PWM_INT_HANDLER,                      // PWM Generator 2
     IntDefaultHandler,                      // Quadrature Encoder 0
-    IntDefaultHandler,                      // ADC Sequence 0
+	 IntADC,                      // ADC Sequence 0
     IntDefaultHandler,                      // ADC Sequence 1
     IntDefaultHandler,                      // ADC Sequence 2
     IntDefaultHandler,                      // ADC Sequence 3
     IntDefaultHandler,                      // Watchdog timer
-    IntDefaultHandler,                      // Timer 0 subtimer A
+	Timer0BIntHandler,                      // Timer 0 subtimer A
 	Timer0BIntHandler,                      // Timer 0 subtimer B
     IntDefaultHandler,                      // Timer 1 subtimer A
     IntDefaultHandler,                      // Timer 1 subtimer B

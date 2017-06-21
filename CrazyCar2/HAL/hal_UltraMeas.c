@@ -63,7 +63,7 @@ void initUltraMeas(void)
     //GPIOIntEnable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
     GPIOIntTypeSet(GPIO_PORTB_BASE,US1_SIGNAL_OUT, GPIO_RISING_EDGE );
 
-    TimerLoadSet(TIMER2_BASE, TIMER_A,2000);
+    TimerLoadSet(TIMER2_BASE, TIMER_A,200);
 
     TimerEnable(TIMER2_BASE, TIMER_A | TIMER_B);
 
@@ -121,7 +121,7 @@ float MeasDist(void)
 	DistUs1mem[3]=DistUs1mem[2];
 	DistUs1mem[2]=DistUs1mem[1];
 	DistUs1mem[1]=DistUs1mem[0];
-	DistUs1mem[0]=(343*((float)Time1/(2*5000000)))*100; //cm
+	DistUs1mem[0]=(343*((float)Time1/(2*100000)))*100; //cm
 	DistUs1=(DistUs1mem[1]+DistUs1mem[0]+DistUs1mem[2]+DistUs1mem[3])/4;
 	GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, ~LCD_BL);
 	}
@@ -139,21 +139,11 @@ void TimerInt(void)
 void GpioInt(void)
 {
 	CountUs1=TimeCounter;
-
     GPIOIntDisable(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
     GPIOIntClear(GPIO_PORTB_BASE,US1_SIGNAL_OUT );
-		GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, LCD_BL);
-		//TimerDisable(TIMER2_BASE, TIMER_A | TIMER_B);
-
-
-
-
-		Time1=CountUs11-CountUs1;
-	//	TimerLoadSet(TIMER2_BASE, TIMER_A,0);
-		//TimerDisable(TIMER2_BASE, TIMER_A);
-		busy=1;
-
-		//
+	GPIOPinWrite(GPIO_PORTA_BASE, LCD_BL, LCD_BL);
+	Time1=CountUs1-CountUs11;
+	busy=1;
 }
 
 

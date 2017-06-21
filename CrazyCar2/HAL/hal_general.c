@@ -42,6 +42,7 @@ void HAL_Init(void)
     UltrasonicDriverInit();
 	hal_uart_init();
 	initUltraMeas();
+	HAL_Adc_init();
 
 	//HAL_Wdt_Init();
 	//HAL_Adc_init();

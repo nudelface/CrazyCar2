@@ -9,7 +9,7 @@
 #define AL_SENSE_READ_H_
 
 
- float Distleft (long );
+ float Dist (long );
  float Distright (long );
  float Distmid (long );
 

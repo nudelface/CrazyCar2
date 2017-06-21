@@ -15,6 +15,7 @@ main.obj: ../HAL/hal_UltraMeas.h
 main.obj: ../DL/driver_general.h
 main.obj: ../DL/driver_aktorik.h
 main.obj: ../HAL/hal_usciB1.h
+main.obj: ../HAL/hal_adc12.h
 main.obj: ../DL/driver_lcd.h
 main.obj: ../AL/Sensorcalib.h
 main.obj: ../AL/sense_read.h
@@ -40,6 +41,7 @@ C:/ti/TivaWare_C_Series-2.1.4.178/driverlib/sysctl.h:
 ../DL/driver_general.h: 
 ../DL/driver_aktorik.h: 
 ../HAL/hal_usciB1.h: 
+../HAL/hal_adc12.h: 
 ../DL/driver_lcd.h: 
 ../AL/Sensorcalib.h: 
 ../AL/sense_read.h: 
