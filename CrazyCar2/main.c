@@ -6,6 +6,7 @@
 #include "driverlib/sysctl.h"
 #include "HAL\hal_general.h"
 #include "HAL\hal_gpio.h"
+
 #include "HAL\Interrupts.h"
 #include "HAL\hal_usc.h"
 #include "HAL\hal_timerB0.h"
@@ -13,6 +14,7 @@
 #include "DL\driver_general.h"
 #include "DL\driver_aktorik.h"
 #include "HAL\hal_usciB1.h"
+#include "driverlib/uart.h"
 #include "HAL\hal_adc12.h"
 //#include "HAL\hal_dma.h"
 //#include "HAL\hal_timerA0.h"
@@ -128,8 +130,20 @@ extern float phi;
 extern RFRX SensData;
 
 float TESTI;
+extern unsigned long Globalmillis;
+extern unsigned long Globaltenmillis;
+extern unsigned long Globalsecond;
+extern int tenmillisready;
+extern int millisready;
+extern int secondready;
 
-
+float acc_speed_x=0;
+float acc_speed_x_last=0;
+float dt=0;
+float t_last=0;
+float acc_dist_x=0;
+float acc_dist_x_last=0;
+int firststart=1;
 
 void main(void)
 
@@ -156,20 +170,21 @@ void main(void)
         	 Abstand1=Dist(b_Abstand1);
         	 Abstand2=Dist(b_Abstand2);
         	 Abstand3=Dist(b_Abstand3);
-        	 Driver_LCD_WriteString("1",1,3,0);
+        /*	 Driver_LCD_WriteString("1",1,3,0);
         	 Driver_LCD_WriteString("2",1,4,0);
         	 Driver_LCD_WriteString("3",1,5,0);
         	 Driver_LCD_WriteUInt((unsigned int)Abstand1,3,14);
         	 Driver_LCD_WriteUInt((unsigned int)Abstand2,4,14);
         	 Driver_LCD_WriteUInt((unsigned int)Abstand3,5,14);
+        	 */
         	 ADC1.Status.B.ADCrdy=0;
 
          }
 
-        if(Tryoutcount>=100000)
+        if(Tryoutcount>100000)
         {
-        	SensData.Data[0]=ACCX.millivalue;
-        	SendSensorData();
+        	SensData.Data[0]=(int)ACCX.value;
+        	//SendSensorData();
         if(Tryoutcount<100001)
         {
         	TESTI=MeasDist();
@@ -179,6 +194,24 @@ void main(void)
         {
         	Tryoutcount=0;
 
+        }
+
+        if(tenmillisready==1)  //Every ten milliseconds
+        {
+        	dt=((float)Globalmillis/1000)-t_last;
+        	t_last=(float)Globalmillis/1000;
+        	acc_speed_x=ACCX.value*dt+acc_speed_x_last; // in m/s/s * s
+        	acc_speed_x_last=acc_speed_x;
+
+        	acc_dist_x=((ACCX.value/2)*(dt*dt))+acc_dist_x_last;
+        	acc_dist_x_last=acc_dist_x;
+
+        	tenmillisready=0;
+        }
+        if(secondready==1)
+        {
+        	acc_speed_x_last=ACCX.value*dt; //noramlisieren
+        	secondready=0;
         }
 
       //  SensData.Data[0]++;
@@ -191,18 +224,37 @@ void main(void)
         GetSlaveData(&GYRZ);
         GetMagData();
 
-        if((ACCX.millivalue)>=0)
+        if(firststart==1)
+        {
+        ACCX.offset=ACCX.value;
+        ACCY.offset=ACCY.value;
+        ACCZ.offset=ACCZ.value;
+        firststart=0;
+        }
+
+
+       if((ACCX.millivalue)>=0)
          {
-             Driver_LCD_WriteString("+",1,1,5);
-             Driver_LCD_WriteUInt((unsigned int)(ACCX.millivalue),1,14);
+             Driver_LCD_WriteString("+",1,2,5);
+             Driver_LCD_WriteUInt((unsigned int)(ACCX.millivalue),2,14);
          }
          else
          {
-         Driver_LCD_WriteString("-",1,1,5);
-         Driver_LCD_WriteUInt((unsigned int)-(ACCX.millivalue),1,14);
+         Driver_LCD_WriteString("-",1,2,5);
+         Driver_LCD_WriteUInt((unsigned int)-(ACCX.millivalue),2,14);
+         }
+       if((acc_speed_x)>=0)
+         {
+             Driver_LCD_WriteString("+",1,3,5);
+             Driver_LCD_WriteUInt((unsigned int)(acc_speed_x),3,14);
+         }
+         else
+         {
+         Driver_LCD_WriteString("-",1,3,5);
+         Driver_LCD_WriteUInt((unsigned int)-(acc_speed_x),3,14);
          }
 
-        if((ACCY.millivalue)>=0)
+       /*        if((ACCY.millivalue)>=0)
          {
              Driver_LCD_WriteString("+",1,2,5);
              Driver_LCD_WriteUInt((unsigned int)(ACCY.millivalue),2,14);
@@ -212,6 +264,7 @@ void main(void)
          Driver_LCD_WriteString("-",1,2,5);
          Driver_LCD_WriteUInt((unsigned int)-(ACCY.millivalue),2,14);
          }
+         */
         /*
        // Driver_LCD_WriteString("X",1,1,0);
        // Driver_LCD_WriteUInt((unsigned int)TESTI,1,14);
@@ -329,7 +382,7 @@ void main(void)
 
 		}
 
-	if(RxData.RxSucc==1 && initfin==1)
+		if(RxData.RxSucc==1 && initfin==1)
 		{
 		  RxStuff();
 		 RxData.RxSucc=0;
@@ -338,8 +391,12 @@ void main(void)
 		{
 		    Driver_LCD_WriteString("Rx_Timeout",10,1,0);
 		    RxData.RxSucc=0;
+		    UARTIntEnable(UART1_BASE, UART_INT_RX );
 		}
-
+		else if(RxData.RxSucc==1 && initfin==0)
+		{
+			UARTIntEnable(UART1_BASE, UART_INT_RX );
+		}
 		//////////////////////////////////////////////////
 
 

@@ -44,6 +44,12 @@ long DirSample=0;
 unsigned long PeriodCount=0;
 unsigned int lastCount=2000;
 unsigned int Count=0;
+unsigned long Globalmillis=0;
+unsigned long Globaltenmillis=0;
+unsigned long Globalsecond=0;
+int tenmillisready=0;
+int millisready=0;
+int secondready=0;
 
 int SpeedSamp=4;
 
@@ -58,11 +64,21 @@ void
 Timer0BIntHandler(void)
 {
 TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
+Globalmillis++;
 PeriodCount++;
-if((PeriodCount>=1000/120)&&(ADC1.Status.B.ADCrdy==0))
+if((PeriodCount>=1000/120)&&(ADC1.Status.B.ADCrdy==0))  //120Hz
 {
 	ADCProcessorTrigger(ADC0_BASE, 0);
 	PeriodCount=0;
+}
+if(Globalmillis>Globaltenmillis*10+10)
+{
+	Globaltenmillis++;
+	tenmillisready=1;
+}
+if(Globalmillis>Globalsecond*1000+1000)
+{
+	Globalsecond++;
 }
 
 }

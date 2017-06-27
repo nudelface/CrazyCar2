@@ -24,7 +24,7 @@
 #include "driverlib/uart.h"
 
 extern int initcounter;
-int initfin=0;
+extern int initfin;
 
 RFRX RxData;
 
@@ -43,10 +43,11 @@ void hal_uart_init(void)
     GPIOPinTypeUART(GPIO_PORTC_BASE, (GPIO_PIN_4 | GPIO_PIN_5));
 
     UARTConfigSetExpClk(UART1_BASE, SysCtlClockGet(),Baud, (UART_CONFIG_WLEN_8| UART_CONFIG_STOP_ONE|UART_CONFIG_PAR_NONE));
-
+    UARTFIFOEnable(UART1_BASE);
+    UARTFIFOLevelSet(UART1_BASE, UART_FIFO_TX7_8,UART_FIFO_RX1_8);
     UARTIntRegister(UART1_BASE, UARTIntHandler);
     UARTEnable(UART1_BASE);
-    UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT);
+    UARTIntEnable(UART1_BASE, UART_INT_RX| UART_INT_RT );
 
 
 
@@ -73,25 +74,42 @@ void UARTIntHandler(void)
     int i=0;
     unsigned long ulStatus;
     unsigned char *Rx = &RxData;
+    unsigned char trash=0;
     ulStatus=UARTIntStatus(UART1_BASE, true);
-    UARTIntClear(UART1_BASE, ulStatus);
-    if(ulStatus && UART_INT_RX)
+    UARTIntClear(UART1_BASE, UART_INT_RX | UART_INT_RT);
+    //UARTIntDisable(UART1_BASE, UART_INT_RX | UART_INT_RT );  ///Edit		1
+    if(initfin==1)
     {
+    //UARTIntDisable(UART1_BASE, UART_INT_RX | UART_INT_RT);
+    }
+    if(((ulStatus == UART_INT_RX)||(ulStatus == (UART_INT_RX+UART_INT_RT)))&&(RxData.RxSucc==0))
+    {
+
         while(UARTCharsAvail(UART1_BASE))
         {
             *Rx=UARTCharGet(UART1_BASE);
-            Driver_LCD_WriteUInt((unsigned int)*Rx,5,i++*14);
+            //Driver_LCD_WriteUInt((unsigned int)*Rx,5,i++*14);
              Rx++;
         }
         RxData.RxSucc=1;
     }
-    else if(ulStatus && UART_INT_RT)
+    else if((ulStatus == UART_INT_RT))
     {
 
         RxData.RxSucc=2;
+        UARTDisable(UART1_BASE);
+        UARTEnable(UART1_BASE);
+        UARTIntEnable(UART1_BASE, UART_INT_RX );
+        while(UARTCharsAvail(UART1_BASE))
+        {
+        	trash=UARTCharGet(UART1_BASE);
+
+
+        }
     }
 
-    initfin=1;
+    UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
+
 
 }
 

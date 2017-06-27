@@ -40,24 +40,27 @@ void DL_Motion_Init(void)
     ACCX.lenTX=1;
     ACCX.lenRX=2;
     ACCX.READ=true;
-    ACCX.multiplier=-0.00012207;
+    ACCX.multiplier=-0.00012207*9.81;
     ACCX.LSB=2;
+    ACCX.offset=0;
 
     ACCY.SlAddr=SL_MOTION_ADD;
     ACCY.RAddr=ACCY_H;
     ACCY.lenTX=1;
     ACCY.lenRX=2;
     ACCY.READ=true;
-    ACCY.multiplier=0.00012207;
+    ACCY.multiplier=0.00012207*9.81;
     ACCY.LSB=2;
+    ACCY.offset=0;
 
     ACCZ.SlAddr=SL_MOTION_ADD;
     ACCZ.RAddr=ACCZ_H;
     ACCZ.lenTX=1;
     ACCZ.lenRX=2;
     ACCZ.READ=true;
-    ACCZ.multiplier=0.00012207;
+    ACCZ.multiplier=0.00012207*9.81;
     ACCZ.LSB=2;
+    ACCZ.offset=0;
 
     GYRX.SlAddr=SL_MOTION_ADD;
     GYRX.RAddr=GYRX_H;
@@ -166,6 +169,13 @@ void DL_Motion_Init(void)
    SendCommand(&Reset,1);
    GetSlaveData(&WHOAMI);
    SendCommand(&Conf,4);
+
+   GetSlaveData(&ACCX);
+   GetSlaveData(&ACCY);
+   GetSlaveData(&ACCZ);
+
+
+
 
 
 }

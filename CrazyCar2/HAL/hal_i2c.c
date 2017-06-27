@@ -105,13 +105,13 @@ void GetSlaveData(SlaveData *data)
 	            if(data->LSB==2)
 	            {
 	            data->Data=(short)(data->RxData[0]<<8)|(short)(data->RxData[1]);
-                data->value=(float)data->Data * data->multiplier;
+                data->value=((float)data->Data * data->multiplier)-data->offset;
                 data->millivalue=(int)(data->value*1000);
 	            }
 	            else
 	            {
 	                data->Data=(short)(data->RxData[1]<<8)|(short)(data->RxData[0]);
-	                data->value=(float)data->Data * data->multiplier;
+	                data->value=((float)data->Data * data->multiplier)-data->offset;
 	                data->millivalue=(int)(data->value*1000000);
 	            }
 
@@ -192,3 +192,5 @@ I2CMasterIntHandler(void)
     };
 
 }
+
+

@@ -12,6 +12,8 @@
 
 void HAL_I2C_Init(void);
 
+
+
 typedef struct SlaveData{
     unsigned char SlAddr;
     unsigned char RAddr;
@@ -26,6 +28,7 @@ typedef struct SlaveData{
     float value;
     int millivalue;
     unsigned int LSB;
+    float offset;
 }SlaveData;
 
 typedef struct Command{
