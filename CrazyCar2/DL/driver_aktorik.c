@@ -19,7 +19,8 @@
 
 extern int initcounter;
 int state_akt=1;
-
+int steer_global=0;
+int throttle_global=0;
 
 
 ///////////////////////////////////LENKUNG //////////////////////////////////
@@ -27,7 +28,7 @@ int state_akt=1;
 void Driver_SetSteering (int SteeringAngle)  //Void funktion. Eingabe: -100% bis +100% Links ist minus Rechts ist plus
 {
 	static int StPWM = 0;
-
+	steer_global=SteeringAngle;
 	if ((SteeringAngle < 0) && (SteeringAngle >= -100) ) //Lenkung nach Links und kleiner als 100%, 100% entspricht dem linken Anschlagspunkt, über 100% kann die Lenkung zerstört werden
 	{
 		StPWM = StPWM_middle + (-SteeringAngle * res_left); // PWM-Wert wird berechnet. PWM=PWM_Mitte - X% * (PWM_mitte-Anschlag_links)/100
@@ -96,7 +97,7 @@ void Driver_SetThrottle (int Throttle)  		//Gasgeben
 
 	static int ThPWM=0;
 	state_akt=1;
-
+	throttle_global=Throttle;
 	if((Throttle >= 0) && (Throttle <= 100))  	//Gasbereich begrenzen
 	{
 		ThPWM = MinFPW + res_throttle * Throttle; 	 // Pwm= PWM0Gas+ Throttle* (PWMMaxGas-PWM0Gas)/100
@@ -114,7 +115,7 @@ void Driver_SetThrottle (int Throttle)  		//Gasgeben
 ///////////////////////////////////  Bremse    //////////////////////////////////
 void Driver_SetBrake (int Brake)    //Funktiom zum Bremsen
 {
-
+	throttle_global=128;
 	static int BrPWM = 0;
 	if((Brake >= 0) && (Brake <= 100))  	//Gasbereich begrenzen
 	{
@@ -147,6 +148,7 @@ void Driver_SetBack(int Backwards)         // Funktion zum Rückwärtsfahren
 	{
 		PWMPulseWidthSet(PWM1_BASE, PwmThrot, BackPWM);
 	}
+	throttle_global=-Backwards;
 }
 
 

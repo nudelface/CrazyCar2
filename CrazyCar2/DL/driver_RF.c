@@ -11,6 +11,7 @@
 #include "..\HAL\hal_i2c.h"
 #include <stdint.h>
 #include <stdbool.h>
+#include <math.h>
 #include "driver_aktorik.h"
 #include "driverlib/uart.h"
 #include "inc/hw_memmap.h"
@@ -23,7 +24,26 @@ extern RFRX RxData;
 RFRX SensData;
 int initfin=0;
 
+extern float acc_speed_x;
+extern float acc_speed_x_last;
+extern float dt;
+extern float t_last;
+extern float acc_dist_x;
+//extern float acc_dist_y;
+extern float acc_dist_x_last;
+extern int steer_global;
+extern int throttle_global;
 
+extern unsigned int Abstand1;
+extern unsigned int Abstand2;
+extern unsigned int Abstand3;
+extern unsigned int Abstand4;
+
+extern double Hx;
+extern double Hy;
+extern double Hz;
+
+extern float phi;
 
 void RF_Init (void)
 {
@@ -81,7 +101,7 @@ void RF_Init (void)
    SensData.Data[1]=4; // Data2
    SensData.Data[2]=5; //DataSens2
    SensData.Data[3]=0xA; // Data3
-   initfin=1;
+   initfin=3;
 
 }
 
@@ -161,25 +181,48 @@ void SendSensorData(void)
 
 			   SensData.Data[1]=(int)ACCX.value*7; // Data2
 			   SensData.Data[2]=(int)ACCY.value*7; //DataSens2  //Vx
-			   SensData.Data[3]=0xA; // Data3     //Vy
+			   SensData.Data[3]=(int)acc_speed_x; // Data3     //Vy
 		   break;
 
 	   	   case 1:
 
-			   SensData.Data[1]=0x0; //Dist2
-			   SensData.Data[2]=0x0; //Dist3
-			   SensData.Data[3]=0xA; //Dist4
+			   SensData.Data[1]=(int)(acc_dist_x/256); //Dist2
+			   SensData.Data[2]=(int)(acc_dist_x)&(0xFF00);//(int)acc_dist_y; //Dist3
+			   SensData.Data[3]=(int)acc_speed_x; //Dist4
 		   break;
 	   	   case 2:
 
-			   SensData.Data[1]=0x0; //Mag
-			   SensData.Data[2]=0x0; //Gyr
-			   SensData.Data[3]=0xA; //Gyr
+			   SensData.Data[1]=steer_global; //Mag
+			   SensData.Data[2]=throttle_global; //Gyr
+			   SensData.Data[3]=Abstand1; //cm
 		   break;
+	   	   case 4:
+			   SensData.Data[1]=Abstand2; //cm
+			   SensData.Data[2]=Abstand3; //
+			   SensData.Data[3]=Abstand4; //
+	   	   break;
+
+	   	   case 5:
+			   SensData.Data[1]=(int)Hx; //nT
+			   SensData.Data[2]=(int)Hy; //
+			   SensData.Data[3]=(int)Hz; //
+		   break;
+
+	   	   case 6:
+			   SensData.Data[1]=(int)phi; //Grad
+			   SensData.Data[2]=(int)GYRZ.millivalue; //dps
+			   SensData.Data[3]=(int)GYRY.millivalue; //
+			break;
+
+	   	   case 7:
+			   SensData.Data[1]=11; //Grad
+			   SensData.Data[2]=11; //dps
+			   SensData.Data[3]=11; //
+	   	   break;
 
 	   }
     TxData(&SensData,8);
-    if(mux<=2)
+    if(mux<2)
     {
     mux++;
     }

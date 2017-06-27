@@ -47,7 +47,7 @@ void hal_uart_init(void)
     UARTFIFOLevelSet(UART1_BASE, UART_FIFO_TX7_8,UART_FIFO_RX1_8);
     UARTIntRegister(UART1_BASE, UARTIntHandler);
     UARTEnable(UART1_BASE);
-    UARTIntEnable(UART1_BASE, UART_INT_RX| UART_INT_RT );
+    UARTIntEnable(UART1_BASE, UART_INT_RX );
 
 
 
@@ -78,9 +78,9 @@ void UARTIntHandler(void)
     ulStatus=UARTIntStatus(UART1_BASE, true);
     UARTIntClear(UART1_BASE, UART_INT_RX | UART_INT_RT);
     //UARTIntDisable(UART1_BASE, UART_INT_RX | UART_INT_RT );  ///Edit		1
-    if(initfin==1)
+    if(initfin<2)
     {
-    //UARTIntDisable(UART1_BASE, UART_INT_RX | UART_INT_RT);
+
     }
     if(((ulStatus == UART_INT_RX)||(ulStatus == (UART_INT_RX+UART_INT_RT)))&&(RxData.RxSucc==0))
     {
@@ -88,17 +88,25 @@ void UARTIntHandler(void)
         while(UARTCharsAvail(UART1_BASE))
         {
             *Rx=UARTCharGet(UART1_BASE);
+            if(initfin<2)
+            {
+            	Driver_LCD_WriteUInt((unsigned int)*Rx,5,i++*14);
+            }
+            else
+            {
+            	//UARTIntDisable(UART1_BASE, UART_INT_RX | UART_INT_RT );
+            }
             //Driver_LCD_WriteUInt((unsigned int)*Rx,5,i++*14);
              Rx++;
         }
         RxData.RxSucc=1;
     }
-    else if((ulStatus == UART_INT_RT))
+    else if(ulStatus == UART_INT_RT)
     {
 
         RxData.RxSucc=2;
-        UARTDisable(UART1_BASE);
-        UARTEnable(UART1_BASE);
+       // UARTDisable(UART1_BASE);
+        //UARTEnable(UART1_BASE);
         UARTIntEnable(UART1_BASE, UART_INT_RX );
         while(UARTCharsAvail(UART1_BASE))
         {
@@ -108,7 +116,7 @@ void UARTIntHandler(void)
         }
     }
 
-    UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
+    //UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
 
 
 }

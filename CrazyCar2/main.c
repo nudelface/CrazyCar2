@@ -69,9 +69,10 @@ extern int Timeout;
 int Tryoutcount=0;
 
 
-int Abstand1;
-int Abstand2;
-int Abstand3;
+unsigned int Abstand1;
+unsigned int Abstand2;
+unsigned int Abstand3;
+unsigned int Abstand4;
 long b_Abstand1;
 long b_Abstand2;
 long b_Abstand3;
@@ -167,9 +168,10 @@ void main(void)
         	 b_Abstand1=ADC1.Bit[2];
         	 b_Abstand2=ADC1.Bit[4];
         	 b_Abstand3=ADC1.Bit[5];
-        	 Abstand1=Dist(b_Abstand1);
+        	 Abstand1=Dist(b_Abstand1); //cm
         	 Abstand2=Dist(b_Abstand2);
         	 Abstand3=Dist(b_Abstand3);
+        	 Abstand4=MeasDist();    //cm
         /*	 Driver_LCD_WriteString("1",1,3,0);
         	 Driver_LCD_WriteString("2",1,4,0);
         	 Driver_LCD_WriteString("3",1,5,0);
@@ -184,6 +186,7 @@ void main(void)
         if(Tryoutcount>100000)
         {
         	SensData.Data[0]=(int)ACCX.value;
+
         	//SendSensorData();
         if(Tryoutcount<100001)
         {
@@ -203,7 +206,7 @@ void main(void)
         	acc_speed_x=ACCX.value*dt+acc_speed_x_last; // in m/s/s * s
         	acc_speed_x_last=acc_speed_x;
 
-        	acc_dist_x=((ACCX.value/2)*(dt*dt))+acc_dist_x_last;
+        	acc_dist_x=((ACCX.value/2)*(dt*dt))+acc_speed_x*dt+acc_dist_x_last;
         	acc_dist_x_last=acc_dist_x;
 
         	tenmillisready=0;
@@ -356,7 +359,7 @@ void main(void)
 
         */
 
-
+        }
 		//////////////////////////////Button Read
 		if(Buttons.button==1&&Buttons.active==1)
 		{
@@ -382,20 +385,22 @@ void main(void)
 
 		}
 
-		if(RxData.RxSucc==1 && initfin==1)
+		if(RxData.RxSucc==1 && initfin>=0)
 		{
 		  RxStuff();
 		 RxData.RxSucc=0;
+		 UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
 		}
 		else if (RxData.RxSucc==2)
 		{
 		    Driver_LCD_WriteString("Rx_Timeout",10,1,0);
 		    RxData.RxSucc=0;
-		    UARTIntEnable(UART1_BASE, UART_INT_RX );
+		    UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
 		}
 		else if(RxData.RxSucc==1 && initfin==0)
 		{
-			UARTIntEnable(UART1_BASE, UART_INT_RX );
+			RxData.RxSucc=0;
+			UARTIntEnable(UART1_BASE, UART_INT_RX | UART_INT_RT );
 		}
 		//////////////////////////////////////////////////
 
@@ -403,11 +408,7 @@ void main(void)
 
 		////////////////////////////////////////////////////////////////////
 
-	}
-        else
-        {
 
-        }
   }
   }
 
